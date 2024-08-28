@@ -1,0 +1,188 @@
+
+1. Write a python script to encrypt the string using Caesar cipher.
+#!/usr/bin/python
+greet="hello world"
+k=3
+for i in greet:
+    if ord(i) in range(97,123):
+        check=ord(i)+k
+    else:
+        check=ord(i)
+    print(i,ord(i),chr(check))
+
+2. Write a Python script to Modify the above script to shift cipher based on user choice. 
+#!/usr/bin/python
+greet = input('enter the string')
+k=int(input('enter the key:'))
+for i in greet:
+    temp=ord(i)+k
+    print(i,ord(i),chr(temp).upper())
+3. Write a Python script to convert cipher text into uppercase characters and split the cipher into group of 5 of characters.
+  #!/usr/bin/python
+greet="hellogoodevening"
+k=int(input('enter the value of key'))
+res=''
+for i in greet:
+      if 97<=ord(i)<=122:
+        temp=ord(i)+k
+        if temp>122:
+            temp=temp-26
+            res+=chr(temp)
+        else:
+            res+=chr(temp)
+      else:
+            res+=i
+cipher_upper=res.upper()
+for i in range(0,len(cipher_upper),5):
+      print('group of 5',cipher_upper[i:i+5])
+4. Write a Python program to Find the histogram for each characters. 
+#!usr/bin/python
+import matplotlib.pyplot as plt
+from collections import Counter
+string = input("enter a string:")
+char_counts=Counter(string)
+characters=list(char_counts.keys())
+counts=list(char_counts.values())
+plt.bar(characters,counts,color='skyblue',edgecolor='black')
+
+plt.title('Histogram of characters in string')
+plt.xlabel('character')
+plt.ylabel('frequency')
+
+plt.show()
+5. Write a Python script to read the contents from the file. 
+#!usr/bin/python
+file=open("script4.py","r")
+contents=file.read()
+print(contents)
+
+6. Write a Python script to encrypt the contents from the file. 
+!usr/bin/python
+file=open("script4.py","r")
+contents=file.read()
+print(contents)
+greet=contents
+k=int(input('enter the value of key'))
+res=''
+for i in greet:
+      if 97<=ord(i)<=122:
+        temp=ord(i)+k
+        if temp>122:
+            temp=temp-26
+            res+=chr(temp)
+        else:
+            res+=chr(temp)
+      else:
+            res+=i
+print(res)
+file.close()
+
+7. Do validation to the python program (2) 
+   - not to accept special characters 
+   - not to accept numeric values 
+   - not to accept empty value 
+   - accept only string
+   - string should be lowercase if not convert the case 
+#!usr/bin/python
+import re
+
+def process_input(greet):
+    # Check if input is a string
+    if not isinstance(greet, str):
+        return "Input must be a string."
+    
+    # Check if input is empty
+    if greet.strip() == "":
+        return "Input cannot be empty."
+    
+    # Check if input contains only alphabetic characters and spaces
+    if not re.match("^[a-zA-Z\s]+$", greet):
+        return "Input can only contain alphabetic characters and spaces."
+    
+    # Convert to lowercase
+    processed_input = greet.lower()
+    
+    return processed_input
+
+
+greet = input("Enter a string: ")
+result = process_input(greet)
+print(result)
+8. Write a Python program to checks if two given strings are anagrams of each other.
+example: mug, gum
+         cork, rock
+         note, tone
+
+  #!usr/bin/python
+print("anagram")
+var1=input("enter the the frst string:")
+var2=input("enter the second string:")
+if(sorted(var1)==sorted(var2)):
+    print(var1,"",var2,"","are aragrams")
+else:
+    print(var1,"",var2,"","not anagrams")
+
+9. Write a Python program to check the given string is palindrome or not
+Do not use built in functions 
+
+Example: MADAM 
+         RACECAR
+         LEVEL
+         CIVIC
+
+#!usr/bin/python
+print('pallindrome')
+greet=input("enter the string:")
+reverse_greet=greet[::-1]
+if(greet==reverse_greet):
+    print('pallindrome')
+else:
+    print('not pallindrome')
+
+                
+10. Write a Python program to check if a substring is present in a given string.
+Example: Understand -- stand
+print('program to check whether substring exist or not')
+greet=input('enter the string')
+substring=input('enter the substring')
+if substring in greet:
+    print("substring",substring,"present in",greet)
+else:
+    print("substring",substring,"not present",greet)
+
+ 
+11. Explore string module 
+   import the string module in your python script. 
+   print all the lowercase characters
+   print all the uppercase characters 
+   print all the lowercase and uppercase characters
+   print all the digits 
+   print all the punctuation symbols  
+   count the total number of punctuation symbols 
+#!usr/bin/python
+import string
+
+# Print all lowercase characters
+print("Lowercase characters:", string.ascii_lowercase)
+
+# Print all uppercase characters
+print("Uppercase characters:", string.ascii_uppercase)
+
+# Print all lowercase and uppercase characters
+print("Lowercase and uppercase characters:", string.ascii_letters)
+
+# Print all digits
+print("Digits:", string.digits)
+
+# Print all punctuation symbols
+print("Punctuation symbols:", string.punctuation)
+
+# Count the total number of punctuation symbols
+punctuation_count = len(string.punctuation)
+print("Total number of punctuation symbols:", punctuation_count)
+
+
+
+Programming is a skill best acquired by practice and example rather than from books   -- unknown 
+
+The only way to do great work is to love what you do   --Steve Jobs
