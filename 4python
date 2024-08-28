@@ -1,0 +1,271 @@
+
+1. Write a Python program to reverse the content of the string.
+Do not use built in 
+#!usr/bin/python
+def reverse_string(input_string):
+    reversed_string = ''  # Initialize an empty string to store the reversed result
+    
+    # Iterate through the original string in reverse order
+    for i in range(len(input_string) - 1, -1, -1):
+        reversed_string += input_string[i]  # Append each character to the reversed string
+    
+    return reversed_string
+
+
+user_input = input("Enter a string to reverse: ")
+result = reverse_string(user_input)
+print("Reversed string:", result)
+
+
+
+2. Create a program that performs basic string compression using the counts of repeated characters. For example, the string “aabcccccaaa” would become “a2b1c5a3”.
+#!usr/bin/python
+def compress_string(input_string):
+    if not input_string:
+        return ""  # Return an empty string if input is empty
+
+    compressed_string = ""
+    count = 1
+    
+    
+    # Iterate through the string
+    for i in range(1, len(input_string)):
+        if input_string[i] == input_string[i - 1]:
+            count += 1  # Increment the count if the current character matches the previous one
+        else:
+            # Append the previous character and its count to the compressed string
+            compressed_string += input_string[i - 1] + str(count)
+            count = 1  # Reset count for the new character
+    
+    # Append the last character and its count
+    compressed_string += input_string[-1] + str(count)
+    
+    # Return the compressed string if it's shorter than the original; otherwise, return the original string
+    return compressed_string 
+
+
+user_input = input("Enter a string to compress: ")
+result = compress_string(user_input)
+print("Compressed string:", result)
+
+
+
+3. Get the Caesar cipher from the user Decrypt the cipher 
+#!usr/bin/python
+def decrypt_caesar_cipher(cipher_text, shift):
+    decrypted_text = ""
+    shift = shift % 26  # Ensure the shift is within the range of 0-25
+
+    for char in cipher_text:
+        if char.isalpha():
+            # Shift character within the bounds of the alphabet
+            start = ord('A') if char.isupper() else ord('a')
+            decrypted_char = chr(start + (ord(char) - start - shift) % 26)
+            decrypted_text += decrypted_char
+        else:
+            # Non-alphabetic characters are added unchanged
+            decrypted_text += char
+    
+    return decrypted_text
+
+
+cipher_text = input("Enter the Caesar cipher text to decrypt: ")
+shift = int(input("Enter the shift value used for encryption: "))
+
+decrypted_message = decrypt_caesar_cipher(cipher_text, shift)
+print("Decrypted message:", decrypted_message)
+
+
+
+4. Get the cipher encrypted using shift cipher. Identify the key used to encrypt using brute force 
+   ie all the values in the key space 
+#!usr/bin/python
+def decrypt_caesar_cipher(cipher_text, shift):
+    decrypted_text = ""
+    shift = shift % 26  # Ensure the shift is within the range of 0-25
+
+    for char in cipher_text:
+        if char.isalpha():
+            # Determine the starting ASCII code based on case
+            start = ord('A') if char.isupper() else ord('a')
+            # Decrypt the character and handle wrap-around with modulo
+            decrypted_char = chr(start + (ord(char) - start - shift) % 26)
+            decrypted_text += decrypted_char
+        else:
+            # Non-alphabetic characters are added unchanged
+            decrypted_text += char
+    
+    return decrypted_text
+
+def brute_force_caesar_cipher(cipher_text):
+    # Try all possible shifts from 1 to 25
+    for shift in range(1, 26):
+        decrypted_text = decrypt_caesar_cipher(cipher_text, shift)
+        print(f"Shift {shift}: {decrypted_text}")
+
+
+cipher_text = input("Enter the Caesar cipher text to decrypt: ")
+print("\nAttempting all possible shifts:")
+brute_force_caesar_cipher(cipher_text)
+
+
+
+5. Find the k value , Provided cipher text and plain text 
+def find_caesar_key(cipher_text, plain_text):
+    if len(cipher_text) != len(plain_text):
+        raise ValueError("Cipher text and plain text must be of the same length.")
+    
+    # Convert letters to numeric values (A=0, B=1, ..., Z=25)
+    def char_to_num(c):
+        return ord(c.upper()) - ord('A')
+    
+    # Calculate the shift key
+    def calculate_key(c_char, p_char):
+        c_num = char_to_num(c_char)
+        p_num = char_to_num(p_char)
+        return (c_num - p_num) % 26
+
+    # Calculate the shift key for all character pairs
+    key = calculate_key(cipher_text[0], plain_text[0])
+    
+    for c_char, p_char in zip(cipher_text, plain_text):
+        if not c_char.isalpha() or not p_char.isalpha():
+            continue  # Skip non-alphabetic characters
+        current_key = calculate_key(c_char, p_char)
+        if current_key != key:
+            raise ValueError("Inconsistent shift values detected. Ensure the provided texts are correctly matched.")
+    
+    return key
+
+
+cipher_text = input("Enter the  cipher text: ").strip()
+plain_text = input("Enter the corresponding plain text: ").strip()
+
+try:
+    key = find_caesar_key(cipher_text, plain_text)
+    print(f"The shift key (k) is: {key}")
+except ValueError as e:
+    print("Error:", e)
+
+
+6. Encrypt and decrypt the string using Atbash cipher 
+#!usr/bin/python
+def atbash_cipher(text):
+    result = ""
+    for char in text:
+        if char.isalpha():
+            # Determine the base ASCII value for uppercase or lowercase letters
+            base = ord('A') if char.isupper() else ord('a')
+            # Calculate the corresponding character in the Atbash cipher
+            new_char = chr(base + (25 - (ord(char) - base)))
+            result += new_char
+        else:
+            # Non-alphabetic characters are added unchanged
+            result += char
+    return result
+
+def main():
+    user_text = input("Enter a string to encrypt/decrypt : ")
+    
+    # Encrypt the text
+    encrypted_text = atbash_cipher(user_text)
+    print("Encrypted text:", encrypted_text)
+    
+    # Decrypt the text (same as encryption for Atbash)
+    decrypted_text = atbash_cipher(encrypted_text)
+    print("Decrypted text:", decrypted_text)
+
+if __name__ == "__main__":
+    main()
+
+
+
+7. Encrypt and decrypt using Affine cipher 
+        add validation
+          #!usr/bin/python
+def mod_inverse(a, m):
+    # Function to find modular inverse of a under modulo m
+    for x in range(1, m):
+        if (a * x) % m == 1:
+            return x
+    raise ValueError(f"No modular inverse exists for a={a} and m={m}")
+
+def affine_encrypt(text, a, b):
+    if not (0 < a < 26) or not (0 <= b < 26):
+        raise ValueError("Keys a and b must be within the valid range: 0 < a < 26 and 0 <= b < 26")
+    
+    if gcd(a, 26) != 1:
+        raise ValueError("Key a must be coprime with 26")
+
+    encrypted_text = ""
+    for char in text:
+        if char.isalpha():
+            # Encrypting character
+            base = ord('A') if char.isupper() else ord('a')
+            encrypted_char = chr((a * (ord(char) - base) + b) % 26 + base)
+            encrypted_text += encrypted_char
+        else:
+            # Non-alphabetic characters are added unchanged
+            encrypted_text += char
+    
+    return encrypted_text
+
+def affine_decrypt(text, a, b):
+    if not (0 < a < 26) or not (0 <= b < 26):
+        raise ValueError("Keys a and b must be within the valid range: 0 < a < 26 and 0 <= b < 26")
+    
+    if gcd(a, 26) != 1:
+        raise ValueError("Key a must be coprime with 26")
+    
+    a_inv = mod_inverse(a, 26)  # Find modular inverse of a
+    
+    decrypted_text = ""
+    for char in text:
+        if char.isalpha():
+            # Decrypting character
+            base = ord('A') if char.isupper() else ord('a')
+            decrypted_char = chr((a_inv * ((ord(char) - base) - b)) % 26 + base)
+            decrypted_text += decrypted_char
+        else:
+            # Non-alphabetic characters are added unchanged
+            decrypted_text += char
+    
+    return decrypted_text
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+def main():
+    text = input("Enter the text to encrypt/decrypt: ").strip()
+    
+    # Input validation for keys
+    try:
+        a = int(input("Enter the key 'a' (must be coprime with 26): "))
+        b = int(input("Enter the key 'b': "))
+        if not (0 < a < 26) or not (0 <= b < 26):
+            raise ValueError("Keys must be in the range 0 < a < 26 and 0 <= b < 26")
+        
+        encrypted_text = affine_encrypt(text, a, b)
+        print("Encrypted text:", encrypted_text)
+        
+        decrypted_text = affine_decrypt(encrypted_text, a, b)
+        print("Decrypted text:", decrypted_text)
+    
+    except ValueError as e:
+        print("Error:", e)
+
+if __name__ == "__main__":
+    main()
+
+
+
+The harder you work for something, the greater you will feel when you achieve it.
+Do not limit your challenges challenge your limit
+
+
+
+
+
+
